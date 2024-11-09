@@ -42,6 +42,7 @@ try {
         db[modelName].associate(db);
       }
     });
+
 } catch (error) {
     console.error("error: ", error);
 

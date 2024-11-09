@@ -1,6 +1,6 @@
 {
   "name": "modulo3",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "express + postgress + node",
   "main": "index.js",
   "repository": "https://github.com/dennysarantes/m3-node.git",
@@ -13,6 +13,7 @@
     "create_migrations": "npx sequelize migration:create --name=create-users"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "eslint": "^9.13.0",
     "eslint-config-prettier": "^9.1.0",
@@ -25,7 +26,8 @@
     "prettier": "^3.3.3",
     "sequelize": "^6.37.5",
     "sequelize-cli": "^6.6.2",
-    "sucrase": "^3.35.0"
+    "sucrase": "^3.35.0",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",

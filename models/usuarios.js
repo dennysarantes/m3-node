@@ -1,11 +1,7 @@
-
-
 "use strict";
 const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-
-
     class Usuarios extends Model {
         /**
          * Helper method for defining associations.
@@ -29,14 +25,30 @@ module.exports = (sequelize, DataTypes) => {
         },
     );
 
-    Usuarios.beforeSave((usuario) => {
-        // Carregamento de arqs e libs externas exclusivas
-        const { CriptografiaUtils } = require('../src/app/util/criptografia');
-
-        usuario.password && (usuario.password_hash = CriptografiaUtils.criptografar(usuario.password));
+    Usuarios.beforeBulkUpdate((usuario) => {
+        atualizarPasswordHash(usuario, "update");
     });
+
+    Usuarios.beforeSave((usuario) => {
+        atualizarPasswordHash(usuario);
+    });
+
+    function atualizarPasswordHash(usuario, tipo) {
+        const { CriptografiaUtils } = require("../src/app/util/criptografia");
+
+        const ehUpdate = tipo === "update";
+        if (usuario.password ?? usuario.attributes.password) {
+            const senhaCrypted = (usuario.password_hash =
+                CriptografiaUtils.criptografar(
+                    usuario.password ?? usuario.attributes.password,
+                ));
+            if (ehUpdate) {
+                usuario.attributes.password_hash = senhaCrypted;
+            } else {
+                usuario.password_hash = senhaCrypted;
+            }
+        }
+    }
 
     return Usuarios;
 };
-
-

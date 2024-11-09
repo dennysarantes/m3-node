@@ -59,7 +59,6 @@ const getSecretHash = async () => {
         // eslint-disable-next-line no-unused-vars
         const [results, _] = await sequelize.query(query);
 
-        console.log('resultado', results[0].valor);
         return results[0].valor;
     } catch (error) {
         console.error('Erro ao buscar dados:', error);

@@ -1,9 +1,13 @@
 import express from 'express';
 import routes from './routes';
+import cors from 'cors';
 //import { variaveis } from '../enviroments/env';
 
-// Importando o database
+// Configurações do database
 import '../models/index.js';
+
+// Configurações de CORS
+import { CorsConfig } from './app/util/cors.config.js';
 
 class App {
 
@@ -14,9 +18,11 @@ class App {
 
 
     }
-
     middlewares(){
-        this.server.use(express.json());
+        this.server.use(
+            express.json(),
+            cors(CorsConfig.options())
+        );
     }
 
     routes(){

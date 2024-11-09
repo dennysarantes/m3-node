@@ -4,7 +4,7 @@ import { CriptografiaUtils } from '../util/criptografia';
 import { JWTUtils } from '../util/jwtUtil';
 
 class SessionController {
-    async gerarJWT(req, res) {
+    async autenticar(req, res) {
         try {
             const { email, password } = req.body;
             const usuario = await Usuarios.findOne({ where: { email: email } });
@@ -41,14 +41,14 @@ class SessionController {
         if (!auth) {
             return res.status(401).json({ error: 'Token não fornecido' });
         }
-
-        const token = auth.startsWith('Bearer ') ? auth.slice(7, auth.length) : auth;
-
         try {
-            const ehTokenValido = await JWTUtils.validarToken(token);
-            if(ehTokenValido){
-                console.log("ehTokenValido: ", ehTokenValido);
-                next(); // Continua para a próxima função
+            const dadosValidacao = await JWTUtils.validarToken(JWTUtils.limparToken(auth));
+
+            if(dadosValidacao.ehValido){
+                //Insere o id do usuário na requisição para evitar uma nova consulta ao banco.
+
+                req.idUsuario = dadosValidacao.idUsuario;
+                next(); // Permite a utilização da rota.
             }else{
                 throw new Error("");
             }
